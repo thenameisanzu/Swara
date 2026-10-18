@@ -133,13 +133,35 @@ function Piano() {
   }, [])
   return (
     <div ref={box} onPointerDown={(e) => { e.currentTarget.setPointerCapture?.(e.pointerId); ptr.current.set(e.pointerId, null); on(e) }} onPointerMove={(e) => ptr.current.has(e.pointerId) && on(e)} onPointerUp={off} onPointerCancel={off}
-      className="relative h-[40dvh] min-h-[230px] touch-none select-none">
-      <AnimatePresence>{last && <motion.span key={last.id} initial={{ opacity: .35, scale: .8 }} animate={{ opacity: 0, scale: 1.3 }} transition={{ duration: 1.2 }} className="pointer-events-none absolute -top-[42dvh] left-1/2 -translate-x-1/2 font-display text-[55vw] font-bold leading-none md:text-[28rem]">{last.t}</motion.span>}</AnimatePresence>
+      className="relative h-[135px] sm:h-[160px] md:h-[26dvh] md:min-h-[190px] md:max-h-[290px] touch-none select-none w-full">
+      <AnimatePresence>{last && <motion.span key={last.id} initial={{ opacity: .35, scale: .8 }} animate={{ opacity: 0, scale: 1.3 }} transition={{ duration: 1.2 }} className="pointer-events-none absolute bottom-full mb-2 left-1/2 -translate-x-1/2 font-display text-[45vw] font-bold leading-none md:text-[24rem] text-white/20 select-none">{last.t}</motion.span>}</AnimatePresence>
       {ripples.map((r) => <motion.span key={r.id} initial={{ scale: 0, opacity: .9 }} animate={{ scale: 9, opacity: 0 }} transition={{ duration: 1.2, ease: 'easeOut' }} className="pointer-events-none absolute -ml-4 -mt-4 h-8 w-8 rounded-full border-2 border-sun" style={{ left: r.x, top: r.y }} />)}
       <div className="flex h-full gap-1">
-        {WHITE.map((k, i) => <motion.button key={i} data-note={`w${i}`} aria-label={`Note ${k[0]}`} animate={{ y: down[`w${i}`] ? 8 : 0, backgroundColor: down[`w${i}`] ? '#FFE14D' : '#FFFFFF' }} transition={{ duration: .08 }} className="flex flex-1 items-end justify-center rounded-b-2xl pb-3 font-bold text-navy/50 shadow-[0_8px_0_rgba(10,15,46,.35)]">{k[2].toUpperCase()}</motion.button>)}
+        {WHITE.map((k, i) => (
+          <motion.button
+            key={i}
+            data-note={`w${i}`}
+            aria-label={`Note ${k[0]}`}
+            animate={{ y: down[`w${i}`] ? 5 : 0, backgroundColor: down[`w${i}`] ? '#FFE14D' : '#FFFFFF' }}
+            transition={{ duration: .08 }}
+            className="flex flex-1 flex-col items-center justify-end rounded-b-xl pb-2 font-bold text-navy shadow-[0_5px_0_rgba(10,15,46,.3)] md:rounded-b-2xl md:pb-3 md:shadow-[0_8px_0_rgba(10,15,46,.35)] active:shadow-none transition-shadow"
+          >
+            <span className="font-display text-xs md:text-sm text-navy/75 leading-none">{k[0]}</span>
+            <span className="hidden md:inline-block text-[10px] text-navy/40 font-mono mt-0.5">{k[2].toUpperCase()}</span>
+          </motion.button>
+        ))}
       </div>
-      {BLACK.map((k, i) => <motion.button key={i} data-note={`b${i}`} aria-label="Sharp note" animate={{ y: down[`b${i}`] ? 6 : 0, backgroundColor: down[`b${i}`] ? '#FFE14D' : '#0A0F2E' }} transition={{ duration: .08 }} className="absolute top-0 z-10 h-[60%] w-[8%] -translate-x-1/2 rounded-b-xl text-xs text-white/40" style={{ left: `${((k[1] + 1) / 8) * 100}%` }} />)}
+      {BLACK.map((k, i) => (
+        <motion.button
+          key={i}
+          data-note={`b${i}`}
+          aria-label="Sharp note"
+          animate={{ y: down[`b${i}`] ? 4 : 0, backgroundColor: down[`b${i}`] ? '#FFE14D' : '#0A0F2E' }}
+          transition={{ duration: .08 }}
+          className="absolute top-0 z-10 h-[58%] w-[8.5%] -translate-x-1/2 rounded-b-lg shadow-[0_4px_8px_rgba(0,0,0,0.45)] md:rounded-b-xl text-xs text-white/40"
+          style={{ left: `${((k[1] + 1) / 8) * 100}%` }}
+        />
+      ))}
     </div>
   )
 }
@@ -180,7 +202,7 @@ export default function Site() {
   return (
     <MotionConfig reducedMotion="user">
       {/* Hero Header & Piano */}
-      <section className="flex min-h-[100dvh] flex-col px-5 pb-8 pt-[max(20px,env(safe-area-inset-top))] md:px-12">
+      <section className="flex min-h-[100dvh] flex-col px-5 pb-20 pt-[max(20px,env(safe-area-inset-top))] sm:pb-24 md:px-12 md:pb-28">
         <header className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <span className="font-display text-2xl font-bold tracking-tight">Swara</span>
@@ -222,22 +244,26 @@ export default function Site() {
           </div>
         </header>
 
-        <div className="flex flex-1 flex-col justify-center py-6">
+        <div className="flex flex-1 flex-col justify-center py-4 md:py-6">
           <motion.h1
             initial={{ y: 70, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 1, ease: [.16, 1, .3, 1] }}
-            className="font-display text-[28vw] font-bold leading-[.82] tracking-tighter md:text-[17rem]"
+            className="font-display text-[22vw] sm:text-[20vw] font-bold leading-[.85] tracking-tighter pb-1 md:pb-3 md:text-[11.5rem] md:leading-[.9] lg:text-[14rem]"
           >
             Play.
           </motion.h1>
-          <p className="mt-4 max-w-md text-lg text-white/90 md:text-xl">
+          <p className="mt-3 max-w-md text-base leading-relaxed text-white/90 md:mt-8 md:max-w-xl md:text-xl lg:mt-10">
             Swara Music Academy, Kochi. These keys are real. Tap them, or slide a finger across.
           </p>
         </div>
 
-        <Piano />
-        <p className="mt-5 text-sm text-white/70">On a keyboard, press A to K. Turn the volume up.</p>
+        <div>
+          <Piano />
+          <p className="mt-3 max-w-xl pr-16 text-xs text-white/70 md:mt-4 md:pr-56 md:text-sm">
+            <span className="hidden md:inline">On a keyboard, press <strong>A to K</strong>. </span>Tap keys or slide a finger across. Turn the volume up.
+          </p>
+        </div>
       </section>
 
       {/* Courses / Instruments */}
